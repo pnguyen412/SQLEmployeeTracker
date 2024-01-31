@@ -11,7 +11,7 @@ require('dotenv').config()
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: process.env.MYSQL_PASSWORD,
+  password: '',
   database: 'employee_db'
 });
 
@@ -24,8 +24,8 @@ connection.connect(err => {
 // function after connection is established and welcome image shows 
 afterConnection = () => {
   console.log("***********************************")
-  console.log("*                                 *")
-  console.log("*        EMPLOYEE MANAGER         *")
+  console.log("*           EMPLOYEE              *")
+  console.log("*           MANAGER               *")
   console.log("*                                 *")
   console.log("***********************************")
   promptUser();
