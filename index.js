@@ -1,9 +1,14 @@
 // import mysql2
 const mysql = require('mysql2')
 // import inquirer 
-const inquirer = require('inquirer'); 
+let inquirer;
+
+import('inquirer').then((module) => {
+ inquirer = module;
+});
+
 // import console.table
-const cTable = require('console.table'); 
+// const cTable = require('console.table'); 
 
 require('dotenv').config()
 
@@ -11,7 +16,7 @@ require('dotenv').config()
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '123123',
   database: 'employee_db'
 });
 
@@ -33,7 +38,8 @@ afterConnection = () => {
 
 // inquirer prompt for first action
 const promptUser = () => {
-  inquirer.prompt ([
+  inquirer
+  .prompt ([
     {
       type: 'list',
       name: 'choices', 
