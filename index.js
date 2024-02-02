@@ -248,93 +248,97 @@ addRole = () => {
 // function to add an employee 
 addEmployee = () => {
   inquirer.prompt([
-    {
-      type: 'input',
-      name: 'firstName',
-      message: "What is the employee's first name?",
-      validate: addFirst => {
-        if (addFirst) {
-          return true;
-        } else {
-          console.log('Please enter a first name');
-          return false;
-        }
-      }
-    },
-    {
-      type: 'input',
-      name: 'lastName',
-      message: "What is the employee's last name?",
-      validate: addLast => {
-        if (addLast) {
-          return true;
-        } else {
-          console.log('Please enter a last name');
-          return false;
-        }
-      }
-    }
-  ])
-    .then(answer => {
-      const params = [answer.firstName, answer.lastName]
-
-      // grab roles from roles table
-      const roleSql = `SELECT role.id, role.title FROM role`;
-
-      connection.promise().query(roleSql, (err, data) => {
-        if (err) throw err;
-
-        const roles = data.map(({ id, title }) => ({ name: title, value: id }));
-
-        inquirer.prompt([
-          {
-            type: 'list',
-            name: 'role',
-            message: "What is the employee's role?",
-            choices: roles
-          }
-        ])
-          .then(roleChoice => {
-            const role = roleChoice.role;
-            params.push(role);
-
-            const managerSql = `SELECT * FROM employee`;
-
-            connection.promise().query(managerSql, (err, data) => {
-              if (err) throw err;
-
-              const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
-
-              // console.log(managers);
-
-              inquirer.prompt([
-                {
-                  type: 'list',
-                  name: 'manager',
-                  message: "Who is the employee's manager?",
-                  choices: managers
-                }
-              ])
-                .then(managerChoice => {
-                  const manager = managerChoice.manager;
-                  params.push(manager);
-
-                  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-                    VALUES (?, ?, ?, ?)`;
-
-                  connection.query(sql, params, (err, result) => {
-                    if (err) throw err;
-                    console.log("Employee has been added!")
-
-                    showEmployees();
-                  });
-                });
-            });
-          });
-      });
-    });
-};
-
+     {
+       type: 'input',
+       name: 'firstName',
+       message: "What is the employee's first name?",
+       validate: addFirst => {
+         if (addFirst) {
+           return true;
+         } else {
+           console.log('Please enter a first name');
+           return false;
+         }
+       }
+     },
+     {
+       type: 'input',
+       name: 'lastName',
+       message: "What is the employee's last name?",
+       validate: addLast => {
+         if (addLast) {
+           return true;
+         } else {
+           console.log('Please enter a last name');
+           return false;
+         }
+       }
+     }
+   ])
+     .then(answer => {
+       const params = [answer.firstName, answer.lastName];
+ 
+       // grab roles from roles table
+       const roleSql = `SELECT role.id, role.title FROM role`;
+ 
+       connection.promise().query(roleSql)
+         .then(data => {
+           const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+ 
+           inquirer.prompt([
+             {
+               type: 'list',
+               name: 'role',
+               message: "What is the employee's role?",
+               choices: roles
+             }
+           ])
+             .then(roleChoice => {
+               const role = roleChoice.role;
+               params.push(role);
+ 
+               const managerSql = `SELECT * FROM employee`;
+ 
+               connection.promise().query(managerSql)
+                 .then(data => {
+                  const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+ 
+                  inquirer.prompt([
+                     {
+                       type: 'list',
+                       name: 'manager',
+                       message: "Who is the employee's manager?",
+                       choices: managers
+                     }
+                   ])
+                     .then(managerChoice => {
+                       const manager = managerChoice.manager;
+                       params.push(manager);
+ 
+                       const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                                  VALUES (?, ?, ?, ?)`;
+ 
+                       connection.promise().query(sql, params)
+                         .then(() => {
+                           console.log("Employee has been added!");
+                           showEmployees();
+                         })
+                         .catch(err => {
+                           if (err) throw err;
+                         });
+                     });
+                 })
+                 .catch(err => {
+                  if (err) throw err;
+                 });
+             });
+         })
+         .catch(err => {
+           if (err) throw err;
+         });
+     });
+ };
+ 
 // function to update an employee 
 updateEmployee = () => {
   // get employees from employee table 
