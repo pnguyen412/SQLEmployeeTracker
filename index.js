@@ -212,8 +212,7 @@ addRole = () => {
  
        connection.promise().query(roleSql)
          .then(data => {
-           const dept = data.map(({ name, id }) => `${name}`);
- 
+          const dept = data.map(({ name, id }) => ({ name: name, value: id })); 
            inquirer.prompt([
              {
                type: 'list',
@@ -223,7 +222,7 @@ addRole = () => {
              }
            ])
              .then(deptChoice => {
-               const dept = deptChoice.dept;
+               const dept = deptChoice.dept.value;
                params.push(dept);
  
                const sql = `INSERT INTO role (title, salary, department_id)
@@ -244,7 +243,7 @@ addRole = () => {
          });
      });
  };
-
+ 
 // function to add an employee 
 addEmployee = () => {
   inquirer.prompt([
