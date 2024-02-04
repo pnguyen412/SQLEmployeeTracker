@@ -13,9 +13,12 @@
 - Source and seed the required files and exit once finished.
 - Use use 'node index.js' in command line to initialize the application
 
-## Walkthrough Video:
+## Walkthrough Video & Screenshots:
 - https://watch.screencastify.com/v/keeCJaQkTWMleMK6RdwM
-
+![screenshot1](assets/images/Screenshot1.png)
+![screenshot1](assets/images/Screenshot2.png)
+![screenshot1](assets/images/Screenshot3.png)
+![screenshot1](assets/images/Screenshot4.png)
 ## Credits:
 - https://github.com/arkenwald
 - https://medium.com/@kukreti.ashutosh/episode-2-mysql-database-setup-and-seeding-77873ce06e96
